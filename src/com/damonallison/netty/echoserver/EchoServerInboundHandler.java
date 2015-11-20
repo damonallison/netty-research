@@ -11,14 +11,15 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
 
 /**
- * ChannelInboundHandler is where channel related events happen. 
+ * Simply echos back what it is given.
  * 
- * Each handler will receive events and somehow act on the events. ChannelInboundHandler is where 
- * your business logic will reside.
+ * This handler is {@link Sharable}, so it must be thread safe and not maintain state.
  *
+ * If your handler must maintain state, it must <em>not</em> be sharable.
+ *
+ * For example, if you want to keep track of per-channel read/write counts, or number of bytes transmitted,
+ * use a non-sharable {@link ChannelHandler}.
  */
-// Makes a single instance of a ChannelHandler available to all channels.
-// Make sure you don't have channel specific shared state saved in this class.
 @Sharable
 public class EchoServerInboundHandler extends ChannelInboundHandlerAdapter {
 
