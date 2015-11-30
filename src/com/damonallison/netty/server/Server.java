@@ -1,8 +1,9 @@
-package com.damonallison.netty.spike;
+package com.damonallison.netty.server;
 
 import com.damonallison.netty.echoserver.EchoServer;
+import io.netty.buffer.ByteBuf;
 
-public class NettySpike {
+public class Server {
 
 	/**
 	 * Netty server bootstrap.
@@ -11,6 +12,6 @@ public class NettySpike {
 
 		EchoServer s = new EchoServer(10000);
 		s.start();
-		
 	}
+
 }

@@ -1,9 +1,11 @@
 package com.damonallison.netty.client;
 
+import com.damonallison.netty.utilities.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class NettyClient {
+public class Client {
 
 	/**
 	 * Runs the client. The client is will connect to localhost:10000.
@@ -20,7 +22,7 @@ public class NettyClient {
 
 		String line = null;
 		do {
-			System.out.println("Enter something :");
+			Log.write("Enter something :");
 			if (line != null) {
 				c.writeMessage(line);
 			}

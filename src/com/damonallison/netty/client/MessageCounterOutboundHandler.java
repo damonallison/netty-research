@@ -1,12 +1,10 @@
 package com.damonallison.netty.client;
 
+import com.damonallison.netty.utilities.Log;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 
-import com.damonallison.netty.client.utilities.Log;
-
-public class MessageCounterOutboundHandler extends
-		ChannelOutboundHandlerAdapter {
+public class MessageCounterOutboundHandler extends ChannelOutboundHandlerAdapter {
 
 	private int count = 0;
 	private String name;

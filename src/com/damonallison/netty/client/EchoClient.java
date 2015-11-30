@@ -1,8 +1,9 @@
 package com.damonallison.netty.client;
 
-import com.damonallison.netty.client.utilities.Log;
+import com.damonallison.netty.utilities.Log;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -10,6 +11,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.CharsetUtil;
+import io.netty.util.concurrent.Promise;
 
 import java.net.InetSocketAddress;
 
@@ -19,7 +21,7 @@ public class EchoClient {
     private final int port;
 
     private EventLoopGroup group;
-    private SocketChannel channel;
+    private Channel channel;
 
     public EchoClient(String host, int port) {
         this.host = host;
@@ -30,23 +32,16 @@ public class EchoClient {
         Log.write("Starting echo client to " + host + ":" + port);
         this.group = new NioEventLoopGroup();
         Bootstrap b = new Bootstrap();
+
+
         b.group(group)
                 .channel(NioSocketChannel.class)
                 .remoteAddress(new InetSocketAddress(host, port))
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    public void initChannel(SocketChannel ch) throws Exception {
-                        // The "first" in an outbound pipeline is actually the
-                        // last handler to be fired.
-                        ch.pipeline().addFirst(
-                                new MessageCounterOutboundHandler("1"));
-                        ch.pipeline().addFirst(
-                                new MessageCounterOutboundHandler("2"));
-                        ch.pipeline().addLast(new EchoClientInboundHandler());
-                        channel = ch;
-                    }
-                });
+                .handler(new EchoClientChannelInitializer());
+
         ChannelFuture f = b.connect().sync(); // Block until connection is successful.
+        this.channel = f.channel();
+
         Log.write("EchoClient connected to " + host + ":" + port);
 
         f.channel().closeFuture().addListener(future -> {

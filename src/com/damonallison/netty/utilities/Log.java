@@ -1,4 +1,4 @@
-package com.damonallison.netty.client.utilities;
+package com.damonallison.netty.utilities;
 
 public class Log {
 
